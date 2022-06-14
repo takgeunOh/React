@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>람보가 좋아하는 무기</h2>
+    <p id="attack"></p>
+
+    <h3></h3>
+    <script>
+        var attack=0;
+        const weaponList = [
+            {no:1, name:'hand', damage:1, range:1},
+            {no:2, name:'knife', damage:5, range:2},
+            {no:3, name:'gun', damage:20, range:50},
+            {no:4, name:'bazooka', damage:100, range:70}
+        ];
+        const equipList = [{no:1, name:'hand', damage:1, range:1}];
+
+        class weaponSwap {
+            constructor(weaponList) {
+                this.weaponList = weaponList;
+            }
+
+            swap(no) {
+                for(var i=0;i<weaponList.length;i++) {
+                    if(no==weaponList[i].no) {
+                        console.log("람보는 " + weaponList[i].name + "을 들고 있다. 데미지가 " + weaponList[i].damage + "가 되었다.");
+                        attack = weaponList[i].damage;
+                        return;
+                    }
+                }
+            }
+        }
+
+        class weaponSwap2 extends weaponSwap{
+            constructor(weaponList) {
+                super(weaponList);
+                this.weaponList=weaponList;
+            }
+
+            equip(vo) {
+                // 총 공격력 반영
+                var data = {};
+                data.no = equipList.length+1;
+                data.name = vo.name;
+                data.damage = vo.damage;
+                data.range = vo.range;
+
+                attack = attack + vo.damage;
+                equipList.push(data);
+                console.log("람보는 " + vo.name + "을 장착했다. 데미지가 " + vo.damage + "만큼 증가하였다.");
+            }
+        }
+
+        const weapon = new weaponSwap(weaponList);
+        const weapon2 = new weaponSwap2(weaponList);
+
+        weapon.swap(1);
+        weapon.swap(2);         // 데미지가 5인 칼로 무기를 바꿨다.
+
+        weapon2.equip({name:'grenade', damage:50, range:10});       // 수류탄을 장착했다.
+        weapon2.equip({name:'gun2', damage:90, range:100});         // 저격총(gun2)를 장착했다.
+
+
+        document.getElementById("attack").innerHTML = "현재 공격력 : " + attack;
+    </script>
+</body>
+</html>
