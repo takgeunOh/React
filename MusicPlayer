@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>뮤직 플레이어</h2>
+    <script>
+
+        const musicList = [
+            {no:1, singer:'아이유', song:'좋은날'}, 
+            {no:2, singer:'이승기', song:'내여자라니까'}, 
+            {no:3, singer:'이무진', song:'신호등'}, 
+            {no:4, singer:'정은지', song:'하늘바라기'},
+            {no:5, singer:'조항조', song:'고맙소'} 
+        ];
+
+        class MusicPlayer {
+            constructor(musicList) {
+                this.musicList = musicList;
+            }
+
+            play() {
+                console.log("전곡 재생 중...");
+                for(var i=0;i<musicList.length;i++) {
+                    console.log(musicList[i].no + " : " + musicList[i].singer + ", " + musicList[i].song);
+                }
+            }
+
+            play(no) {
+                for(var i=0;i<musicList.length;i++) {
+                    if(no==musicList[i].no) {
+                        console.log(musicList[i].singer + "의 " + musicList[i].song + " 재생 중....");
+                        return;
+                    }
+                }
+            }
+        }
+
+        class MusicPlayer2 extends MusicPlayer{
+            constructor(singer, song) {
+                super(musicList);
+                this.musicList = musicList;
+            }
+
+            addMusic(vo) {
+                // console.log(vo);
+                // console.log(vo.song);
+                // console.log(musicList.length+1);        // 6 출력
+                var data = {};
+                data.no = musicList.length+1;
+                data.singer = vo.singer;
+                data.song = vo.song;
+                musicList.push(data);
+            }
+
+            play() {
+                console.log("전곡 재생 중입니다.");
+                for(var i=0;i<musicList.length;i++) {
+                    console.log(musicList[i].no + " : " + musicList[i].singer + ", " + musicList[i].song);
+                }
+            }
+        }
+
+
+       
+
+        const mp = new MusicPlayer(musicList);
+
+        // mp.play(3); // 이무진의 신호등 재생 중....
+        // mp.play();  // 전곡 재생 중...
+
+        const mp2 = new MusicPlayer2(musicList);
+        // 뮤직플레이어를 상속 받은 애
+        mp2.addMusic({singer:'이선희', song:'J에게'});
+        mp2.addMusic({singer:'임창정', song:'소주한잔'});
+
+        mp2.play();
+    </script>
+</body>
+</html>
