@@ -1,0 +1,85 @@
+import { useState } from 'react';
+import './App.css';
+import Header from './Header';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { type } from '@testing-library/user-event/dist/type';
+
+function Content({menu, member, add, remove}) {
+  const [userId, setUserId] = useState("");
+  const [userName, setUserName] = useState("");
+  const [delUserNo, setDelNo] = useState("");
+
+  return (
+    <>
+      <div style={{margin:'20px'}}>
+        <div class="form-group">
+          <label>ID</label>
+          <input type="text" class="form-control" placeholder="ID 입력" value={userId} onChange={e=>setUserId(e.currentTarget.value)}/>
+        </div>
+        <div class="form-group">
+          <label>이름</label>
+          <input type="text" class="form-control" placeholder="이름 입력" value={userName} onChange={e=>setUserName(e.currentTarget.value)}/>
+        </div>
+        <div class="form-group">
+          <label>삭제할 번호</label>
+          <input type="text" class="form-control" placeholder="삭제할 번호 입력" value={delUserNo} onChange={e=>setDelNo(e.currentTarget.value)}/>
+        </div>
+        <button type="submit" class="btn btn-primary" style={{margin : '20px'}} onClick={(event) => {
+          event.preventDefault();
+          add(userId, userName);
+        }}>추가</button>
+        <button type="submit" class="btn btn-danger" onClick={(event) => {
+          event.preventDefault();
+          remove(delUserNo);
+        }}>삭제</button>
+      </div>
+
+      <ul class="list-group">
+        {member.map((item, i) => {
+          console.log(item);
+          return <li class="list-group-item" key={item.no}><input class="form-check-input me-1" type="checkbox"></input>{item.no} - {item.id} - {item.name}</li>;
+        })}
+      </ul>
+      
+    </>
+  )
+}
+
+
+function App() {
+  const menuItems = ['홈', '패키지', '관광지', '게시판'];
+  const [memberList, setMemberList] = useState ([
+    {no:1, id:'OH', name:'오탁근'},
+    {no:2, id:'YEOM', name:'염정아'},
+    {no:3, id:'JUNG', name:'정승호'},
+    {no:4, id:'KWON', name:'권석준'},
+  ]);
+
+  let no = memberList.at(-1).no;
+  // console.log("배열 마지막 no : " + no);
+
+  function memberListAddAction(userId, userName) {
+    // console.log("memberListAddAction : " + userId + userName);
+    no++;
+    setMemberList([...memberList, {no, id:userId, name:userName}]);
+  }
+  
+  function memberListDelAction(delUserNo) {
+    console.log("삭제할 번호 : " + delUserNo);
+    console.log(typeof delUserNo);
+    delUserNo = Number(delUserNo);
+
+
+    // 버튼에서 처리된 no값과 같지 않은 것들만 새로운 멤버리스트 배열로 처리해서 state 값 변경
+    setMemberList(memberList.filter((member) => member.no !== delUserNo));
+  }
+
+  return (
+    <>
+    <Header name="오탁근" title="OCO" people={menuItems}></Header>
+    <Content menu={menuItems} member={memberList} add={memberListAddAction} remove={memberListDelAction} />
+    </>
+  );
+}
+
+export default App;
